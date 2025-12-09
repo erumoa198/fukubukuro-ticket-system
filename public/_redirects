@@ -1,1 +1,3 @@
-/ticket/*  /ticket/placeholder/index.html  200
+/ticket/placeholder/*  /ticket/placeholder/:splat  200
+/ticket/:id  /ticket/placeholder/index.html  200
+/ticket/:id/  /ticket/placeholder/index.html  200
