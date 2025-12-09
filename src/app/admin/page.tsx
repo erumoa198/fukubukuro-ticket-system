@@ -312,7 +312,7 @@ export default function AdminPage() {
       setShowStaffModal(false)
       alert(editingStaff ? 'スタッフ情報を更新しました' : 'スタッフを追加しました')
     } catch (err) {
-      console.error(err)
+      console.error('スタッフ保存エラー:', err)
       alert('保存に失敗しました')
     } finally {
       setSavingStaff(false)
