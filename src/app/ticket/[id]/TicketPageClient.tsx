@@ -117,12 +117,33 @@ function TicketCard({ ticket, index }: { ticket: Ticket; index: number }) {
 }
 
 export default function TicketPageClient({ id }: { id: string }) {
-  const setId = id
+  // URLから実際のIDを取得（静的エクスポート対応）
+  const [setId, setSetId] = useState<string>(id)
   const [ticketSet, setTicketSet] = useState<TicketSetWithTickets | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // クライアントサイドでURLから実際のIDを取得
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const pathParts = window.location.pathname.split('/').filter(Boolean)
+      const ticketIndex = pathParts.indexOf('ticket')
+      if (ticketIndex !== -1 && pathParts[ticketIndex + 1]) {
+        const urlId = pathParts[ticketIndex + 1]
+        if (urlId !== 'placeholder') {
+          setSetId(urlId)
+        }
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    // placeholderの場合はデータ取得をスキップ
+    if (setId === 'placeholder') {
+      setLoading(false)
+      setError('チケットが見つかりません')
+      return
+    }
     const fetchTicketSet = async () => {
       try {
         if (isDemoMode) {
