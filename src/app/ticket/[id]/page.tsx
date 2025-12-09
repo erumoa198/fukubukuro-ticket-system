@@ -8,6 +8,11 @@ import { supabase } from '@/lib/supabase'
 import { TicketSetWithTickets, SET_TYPE_NAMES, Ticket } from '@/types'
 import { isDemoMode, getDemoTicketSet, getDemoTickets } from '@/lib/demo-data'
 
+// 静的エクスポート用：generateStaticParamsを空で提供し、動的ルートを許可
+export function generateStaticParams() {
+  return []
+}
+
 // 個別チケットコンポーネント（明るいモダンスタイル）
 function TicketCard({ ticket, index }: { ticket: Ticket; index: number }) {
   const isUsed = ticket.is_used
