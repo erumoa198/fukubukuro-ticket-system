@@ -1,0 +1,925 @@
+@import 'tailwindcss';
+
+@theme {
+  /* エレガントなローズゴールド */
+  --color-rose-gold-50: #fdf9f7;
+  --color-rose-gold-100: #faf0ec;
+  --color-rose-gold-200: #f5ddd4;
+  --color-rose-gold-300: #edc4b5;
+  --color-rose-gold-400: #e4a48f;
+  --color-rose-gold-500: #d4897a;
+  --color-rose-gold-600: #c47264;
+  --color-rose-gold-700: #a85d51;
+  --color-rose-gold-800: #8a4d44;
+  --color-rose-gold-900: #72423b;
+
+  /* 上品なシャンパンゴールド */
+  --color-gold-50: #fdfcf7;
+  --color-gold-100: #fbf7e8;
+  --color-gold-200: #f6ecc8;
+  --color-gold-300: #efdc9e;
+  --color-gold-400: #e6c76d;
+  --color-gold-500: #d9b04a;
+  --color-gold-600: #c49a3d;
+  --color-gold-700: #a37d34;
+  --color-gold-800: #866430;
+  --color-gold-900: #6e532b;
+
+  /* 美容系アクセントカラー */
+  --color-beauty-pink: #f5e1e9;
+  --color-beauty-lavender: #e8e1f5;
+  --color-beauty-mint: #e1f5ef;
+
+  --font-sans: 'Noto Sans JP', sans-serif;
+  --font-serif: 'Noto Serif JP', serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, #fdfcfa 0%, #f9f6f3 100%);
+  color: #3d3d3d;
+  min-height: 100vh;
+}
+
+/* ロゴエリア */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.logo-container img {
+  max-height: 48px;
+  width: auto;
+}
+
+/* 高級感のあるカードスタイル */
+.ticket-card {
+  background: linear-gradient(145deg, #ffffff, #fdfcfa);
+  border: 1px solid rgba(212, 176, 74, 0.15);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold-400), var(--color-rose-gold-400), var(--color-gold-400));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ticket-card:hover {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.ticket-card:hover::before {
+  opacity: 1;
+}
+
+.ticket-card.used {
+  background: linear-gradient(145deg, #f8f8f8, #f2f2f2);
+  border-color: #e5e5e5;
+  opacity: 0.75;
+}
+
+.ticket-card.used::before {
+  display: none;
+}
+
+/* エレガントなゴールドボタン */
+.btn-gold {
+  background: linear-gradient(135deg, var(--color-gold-400) 0%, var(--color-gold-500) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 14px rgba(217, 176, 74, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, var(--color-gold-500) 0%, var(--color-gold-600) 100%);
+  box-shadow:
+    0 6px 20px rgba(217, 176, 74, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 8px rgba(217, 176, 74, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-gold:disabled {
+  background: linear-gradient(135deg, #ccc 0%, #bbb 100%);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ローズゴールドボタン（セカンダリ） */
+.btn-rose {
+  background: linear-gradient(135deg, var(--color-rose-gold-400) 0%, var(--color-rose-gold-500) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(212, 137, 122, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-rose:hover {
+  background: linear-gradient(135deg, var(--color-rose-gold-500) 0%, var(--color-rose-gold-600) 100%);
+  box-shadow: 0 6px 20px rgba(212, 137, 122, 0.4);
+  transform: translateY(-1px);
+}
+
+/* QRコードコンテナ */
+.qr-container {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.06);
+  display: inline-block;
+  border: 1px solid rgba(217, 176, 74, 0.1);
+}
+
+/* ヘッダースタイル */
+.header-elegant {
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(253,252,250,0.95));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(217, 176, 74, 0.1);
+}
+
+/* セクション区切り */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 176, 74, 0.3), transparent);
+  margin: 24px 0;
+}
+
+/* ステータスバッジ */
+.badge-unused {
+  background: linear-gradient(135deg, var(--color-gold-100), var(--color-gold-50));
+  color: var(--color-gold-700);
+  border: 1px solid var(--color-gold-200);
+}
+
+.badge-used {
+  background: #f0f0f0;
+  color: #888;
+  border: 1px solid #e0e0e0;
+}
+
+/* 入力フィールド */
+.input-elegant {
+  border: 1px solid #e5e2dc;
+  border-radius: 10px;
+  padding: 14px 18px;
+  background: white;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.input-elegant:focus {
+  outline: none;
+  border-color: var(--color-gold-400);
+  box-shadow: 0 0 0 3px rgba(217, 176, 74, 0.15);
+}
+
+.input-elegant::placeholder {
+  color: #aaa;
+}
+
+/* モーダルオーバーレイ */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.3s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease forwards;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 176, 74, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(217, 176, 74, 0); }
+}
+
+.pulse-gold {
+  animation: pulse-gold 2s infinite;
+}
+
+/* スクロールバー */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-gold-300), var(--color-gold-400));
+  border-radius: 3px;
+}
+
+/* 福袋アイコン装飾 */
+.fukubukuro-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--color-gold-100), var(--color-rose-gold-100));
+  border-radius: 16px;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(217, 176, 74, 0.2);
+}
+
+/* チケットアイコン */
+.ticket-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ticket-icon.active {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-500));
+  color: white;
+}
+
+.ticket-icon.used {
+  background: #e8e8e8;
+  color: #999;
+}
+
+/* ========================================
+   2025 Modern Ticket Page - Glassmorphism Style
+======================================== */
+
+/* ページ背景 - ダークグラデーション */
+.modern-page-bg {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 背景デコレーション */
+.bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+}
+
+.blob-1 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #e94560, #ff6b9d);
+  top: -100px;
+  right: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.blob-2 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #f39422, #e6c76d);
+  bottom: 20%;
+  left: -80px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.blob-3 {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  bottom: -50px;
+  right: 10%;
+  animation: float 12s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.05); }
+}
+
+/* グラスヘッダー */
+.glass-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-button,
+.share-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover,
+.share-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.header-logo {
+  opacity: 0.9;
+}
+
+/* ヒーローセクション */
+.hero-section {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.hero-content {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-label {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(230, 199, 109, 0.2), rgba(212, 137, 122, 0.2));
+  border: 1px solid rgba(230, 199, 109, 0.3);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #e6c76d;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* 進捗バー */
+.progress-container {
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e6c76d, #e94560);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 期限切れバッジ */
+.expired-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+/* チケットセクション */
+.tickets-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+/* モダンチケットカード */
+.ticket-card-modern {
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.glass-ticket {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.glass-ticket:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.glass-ticket-used {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.glass-ticket-used:hover {
+  transform: none;
+}
+
+/* チケット内容 */
+.ticket-content {
+  padding: 20px;
+}
+
+.ticket-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.ticket-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ステータスバッジ */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.status-badge.used {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* チケット区切り線 */
+.ticket-divider {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.divider-circle {
+  width: 20px;
+  height: 20px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+.divider-circle.left {
+  margin-left: -10px;
+}
+
+.divider-circle.right {
+  margin-right: -10px;
+}
+
+.divider-line {
+  flex: 1;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+/* チケットフッター */
+.ticket-footer {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.type-label {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1px;
+}
+
+.type-value {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e6c76d, #d9b04a);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.ticket-valid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.valid-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 使用済みフッター */
+.ticket-footer-used {
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* QRセクション */
+.qr-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+}
+
+.qr-card {
+  display: inline-block;
+  padding: 24px;
+}
+
+.qr-header {
+  margin-bottom: 16px;
+}
+
+.qr-label {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 4px;
+}
+
+.qr-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.qr-code-wrapper {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  display: inline-block;
+}
+
+.qr-footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.qr-instruction {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ページフッター */
+.page-footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ローディングロゴ */
+.loading-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* レガシー互換 */
+.ticket-page-bg {
+  background: linear-gradient(135deg, #d4a574 0%, #c9956a 50%, #b8845f 100%);
+}
+
+/* ========================================
+   チケットスタイル（切り取り線付き）
+======================================== */
+.ticket-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.ticket {
+  animation: bouncingCard 0.6s ease-out infinite alternate;
+  background-color: white;
+  color: #3d3d3d;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.ticket-used {
+  opacity: 0.7;
+  animation: none;
+}
+
+.ticket-shadow {
+  animation: bouncingShadow 0.6s ease-out infinite alternate;
+  margin-top: 4px;
+  width: 95%;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  filter: blur(12px);
+}
+
+.ticket-shadow-used {
+  animation: none;
+  opacity: 0.5;
+}
+
+/* チケット内容 */
+.ticket-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 16px 20px 8px;
+  color: #3d3d3d;
+}
+
+.ticket-hr {
+  width: 90%;
+  margin: 0 auto;
+  border: none;
+  border-top: 1px solid #efefef;
+}
+
+.ticket-detail {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 20px;
+  color: #666;
+}
+
+.ticket-status {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.ticket-sub-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  padding: 12px 20px;
+}
+
+.ticket-type-badge {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-500));
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.ticket-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* 切り取り線 */
+.ticket-rip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.circle-left {
+  width: 12px;
+  height: 24px;
+  background: linear-gradient(135deg, #d4a574, #c9956a);
+  border-radius: 0 12px 12px 0;
+}
+
+.rip-line {
+  width: 100%;
+  border-top: 3px dashed #d4a574;
+}
+
+.circle-right {
+  width: 12px;
+  height: 24px;
+  background: linear-gradient(135deg, #c9956a, #b8845f);
+  border-radius: 12px 0 0 12px;
+}
+
+/* QRチケット用 */
+.qr-ticket {
+  animation: none;
+}
+
+.qr-ticket .ticket-title {
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* チケットバウンスアニメーション（控えめ） */
+@keyframes bouncingCard {
+  from { transform: translateY(0); }
+  to { transform: translateY(-3px); }
+}
+
+@keyframes bouncingShadow {
+  from { transform: translateY(0px); opacity: 0.25; }
+  to { transform: translateY(2px); opacity: 0.15; }
+}
+
+/* 使用済みチケットスタイル */
+.ticket-used .ticket-title {
+  color: #999;
+}
+
+.ticket-used .ticket-type-badge {
+  background: #ccc;
+}
+
+/* 使用済み - 切り取り線がちぎれた風 */
+.ticket-rip-torn {
+  position: relative;
+}
+
+.ticket-rip-torn .circle-left,
+.ticket-rip-torn .circle-right {
+  background: #ddd;
+}
+
+.ticket-rip-torn .rip-line {
+  border-top-color: #ddd;
+}
+
+/* 使用済み - 下部がちぎれてなくなった演出 */
+.ticket-used {
+  border-radius: 12px 12px 0 0;
+  padding-bottom: 0;
+}
+
+.ticket-used .ticket-rip {
+  /* 切り取り線を下端として丸みを持たせる */
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(to bottom, transparent 40%, rgba(200, 200, 200, 0.3) 100%);
+  padding-bottom: 4px;
+}
+
+/* 使用済みの情報（切り取り線の下に小さく表示） */
+.ticket-used-info {
+  text-align: center;
+  padding: 6px 12px 10px;
+  background: linear-gradient(to bottom, rgba(245, 245, 245, 0.9), rgba(235, 235, 235, 0.95));
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+}
