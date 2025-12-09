@@ -1,2 +1,3 @@
 # Cloudflare Pages SPA fallback for dynamic routes
-/ticket/*  /ticket/placeholder/index.html  200
+/ticket/:id  /ticket/placeholder/index.html  200
+/ticket/:id/  /ticket/placeholder/index.html  200
