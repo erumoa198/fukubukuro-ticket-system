@@ -1,32 +1,27 @@
 // Cloudflare Pages Function for dynamic ticket routes
-// This function serves the placeholder page for any /ticket/:id request
-
 export async function onRequest(context) {
-  const { request, env } = context;
-  const url = new URL(request.url);
+  const url = new URL(context.request.url);
 
-  // Fetch the placeholder page
-  const placeholderUrl = new URL('/ticket/placeholder/index.html', url.origin);
-
-  try {
-    // Get the placeholder HTML from the static assets
-    const response = await env.ASSETS.fetch(placeholderUrl.toString());
-
-    if (!response.ok) {
-      // If placeholder doesn't exist, return 404
-      return new Response('Page not found', { status: 404 });
-    }
-
-    // Return the placeholder page with the same headers
-    return new Response(response.body, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=0, must-revalidate',
-      },
-    });
-  } catch (error) {
-    console.error('Error fetching placeholder:', error);
-    return new Response('Internal Server Error', { status: 500 });
+  // placeholder への直接アクセスはスキップ
+  if (url.pathname.includes('/placeholder')) {
+    return context.next();
   }
+
+  // /ticket/placeholder/index.html を取得して返す
+  const placeholderUrl = `${url.origin}/ticket/placeholder/index.html`;
+
+  const response = await fetch(placeholderUrl);
+
+  if (!response.ok) {
+    return new Response('Page not found', { status: 404 });
+  }
+
+  const html = await response.text();
+
+  return new Response(html, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+    },
+  });
 }

@@ -1,9 +1,5 @@
 {
   "version": 1,
-  "include": ["/*"],
-  "exclude": [
-    "/ticket/placeholder/*",
-    "/_next/*",
-    "/favicon.ico"
-  ]
+  "include": ["/ticket/*"],
+  "exclude": ["/ticket/placeholder/*"]
 }
