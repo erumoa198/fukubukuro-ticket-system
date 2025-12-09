@@ -327,11 +327,11 @@ export default function TicketPage() {
           style={{
             width: 250,
             height: 250,
-            background: 'linear-gradient(135deg, #e6c76d, #f5deb0)',
+            background: 'linear-gradient(135deg, #f5d0c5, #fce4dc)',
             bottom: '20%',
             left: -80,
             filter: 'blur(60px)',
-            opacity: 0.6,
+            opacity: 0.5,
           }}
         />
         <div
@@ -347,33 +347,34 @@ export default function TicketPage() {
           }}
         />
 
-        {/* キラキラパーティクル */}
+        {/* キラキラパーティクル（白・ピンクベージュ系） */}
         <div className="absolute animate-sparkle-1" style={{ top: '15%', left: '20%' }}>
-          <div className="w-2 h-2 rounded-full" style={{ background: '#e6c76d', opacity: 0.6 }} />
+          <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.9)', boxShadow: '0 0 8px rgba(255, 255, 255, 0.8)' }} />
         </div>
         <div className="absolute animate-sparkle-2" style={{ top: '30%', right: '15%' }}>
-          <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#d4a574', opacity: 0.5 }} />
+          <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(255, 230, 220, 0.9)', boxShadow: '0 0 6px rgba(255, 200, 180, 0.6)' }} />
         </div>
         <div className="absolute animate-sparkle-3" style={{ top: '60%', left: '10%' }}>
-          <div className="w-2 h-2 rounded-full" style={{ background: '#f5c6a8', opacity: 0.4 }} />
+          <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.85)', boxShadow: '0 0 10px rgba(255, 255, 255, 0.7)' }} />
         </div>
         <div className="absolute animate-sparkle-1" style={{ top: '75%', right: '25%' }}>
-          <div className="w-1 h-1 rounded-full" style={{ background: '#e6c76d', opacity: 0.5 }} />
+          <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(255, 240, 235, 0.9)', boxShadow: '0 0 6px rgba(255, 220, 210, 0.5)' }} />
         </div>
         <div className="absolute animate-sparkle-2" style={{ top: '45%', left: '30%' }}>
-          <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#f5deb0', opacity: 0.4 }} />
+          <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.8)', boxShadow: '0 0 8px rgba(255, 255, 255, 0.6)' }} />
         </div>
         <div className="absolute animate-sparkle-3" style={{ top: '85%', left: '40%' }}>
-          <div className="w-2 h-2 rounded-full" style={{ background: '#e8c4a0', opacity: 0.5 }} />
+          <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255, 235, 225, 0.85)', boxShadow: '0 0 8px rgba(255, 210, 195, 0.5)' }} />
         </div>
 
-        {/* 浮遊する小さな円 */}
+        {/* 浮遊する小さな円（白・ピンクベージュ系） */}
         <div
           className="absolute rounded-full animate-bubble-1"
           style={{
             width: 8,
             height: 8,
-            background: 'rgba(212, 165, 116, 0.3)',
+            background: 'rgba(255, 255, 255, 0.5)',
+            boxShadow: '0 0 12px rgba(255, 255, 255, 0.4)',
             top: '40%',
             left: '15%',
           }}
@@ -383,7 +384,8 @@ export default function TicketPage() {
           style={{
             width: 6,
             height: 6,
-            background: 'rgba(212, 165, 116, 0.25)',
+            background: 'rgba(255, 240, 235, 0.45)',
+            boxShadow: '0 0 10px rgba(255, 220, 210, 0.3)',
             top: '55%',
             right: '20%',
           }}
@@ -393,7 +395,8 @@ export default function TicketPage() {
           style={{
             width: 10,
             height: 10,
-            background: 'rgba(200, 150, 100, 0.2)',
+            background: 'rgba(255, 255, 255, 0.4)',
+            boxShadow: '0 0 15px rgba(255, 255, 255, 0.35)',
             top: '25%',
             right: '30%',
           }}
