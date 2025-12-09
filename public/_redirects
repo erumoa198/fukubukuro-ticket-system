@@ -1,3 +1,6 @@
-/ticket/placeholder/*  /ticket/placeholder/:splat  200
-/ticket/:id  /ticket/placeholder/index.html  200
-/ticket/:id/  /ticket/placeholder/index.html  200
+# Cloudflare Pages リダイレクト設定
+# /ticket/:id へのアクセスを /_ticket-template/ ページで処理
+# 無限ループを避けるため、テンプレートは /ticket/ パス外に配置
+
+/ticket/:id  /_ticket-template/index.html  200
+/ticket/:id/  /_ticket-template/index.html  200

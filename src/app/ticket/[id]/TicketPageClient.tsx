@@ -130,7 +130,7 @@ export default function TicketPageClient({ id }: { id: string }) {
       const ticketIndex = pathParts.indexOf('ticket')
       if (ticketIndex !== -1 && pathParts[ticketIndex + 1]) {
         const urlId = pathParts[ticketIndex + 1]
-        if (urlId !== 'placeholder') {
+        if (urlId !== 'placeholder' && urlId !== 'template') {
           setSetId(urlId)
         }
       }
@@ -138,8 +138,8 @@ export default function TicketPageClient({ id }: { id: string }) {
   }, [])
 
   useEffect(() => {
-    // placeholderの場合はデータ取得をスキップ
-    if (setId === 'placeholder') {
+    // placeholderまたはtemplateの場合はデータ取得をスキップ
+    if (setId === 'placeholder' || setId === 'template') {
       setLoading(false)
       setError('チケットが見つかりません')
       return
