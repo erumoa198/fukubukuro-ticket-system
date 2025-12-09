@@ -1,6 +1,6 @@
 # Cloudflare Pages リダイレクト設定
-# /ticket/:id へのアクセスを /_ticket-template/ ページで処理
-# 無限ループを避けるため、テンプレートは /ticket/ パス外に配置
+# /ticket/:id へのアクセスを /ticket-view/ ページで処理
+# /ticket/ とは別のパスなので無限ループを回避
 
-/ticket/:id  /_ticket-template/index.html  200
-/ticket/:id/  /_ticket-template/index.html  200
+/ticket/:id  /ticket-view/index.html  200
+/ticket/:id/  /ticket-view/index.html  200
