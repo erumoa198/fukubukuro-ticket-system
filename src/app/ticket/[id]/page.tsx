@@ -309,6 +309,7 @@ export default function TicketPage() {
     >
       {/* 背景デコレーション */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* 大きなぼかし円 */}
         <div
           className="absolute rounded-full animate-float-slow"
           style={{
@@ -317,8 +318,8 @@ export default function TicketPage() {
             background: 'linear-gradient(135deg, #f8d7c4, #f5c6a8)',
             top: -100,
             right: -100,
-            filter: 'blur(80px)',
-            opacity: 0.6,
+            filter: 'blur(60px)',
+            opacity: 0.7,
           }}
         />
         <div
@@ -329,8 +330,8 @@ export default function TicketPage() {
             background: 'linear-gradient(135deg, #e6c76d, #f5deb0)',
             bottom: '20%',
             left: -80,
-            filter: 'blur(80px)',
-            opacity: 0.5,
+            filter: 'blur(60px)',
+            opacity: 0.6,
           }}
         />
         <div
@@ -341,8 +342,60 @@ export default function TicketPage() {
             background: 'linear-gradient(135deg, #d4a574, #e8c4a0)',
             bottom: -50,
             right: '10%',
-            filter: 'blur(80px)',
-            opacity: 0.5,
+            filter: 'blur(60px)',
+            opacity: 0.6,
+          }}
+        />
+
+        {/* キラキラパーティクル */}
+        <div className="absolute animate-sparkle-1" style={{ top: '15%', left: '20%' }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: '#e6c76d', opacity: 0.6 }} />
+        </div>
+        <div className="absolute animate-sparkle-2" style={{ top: '30%', right: '15%' }}>
+          <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#d4a574', opacity: 0.5 }} />
+        </div>
+        <div className="absolute animate-sparkle-3" style={{ top: '60%', left: '10%' }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: '#f5c6a8', opacity: 0.4 }} />
+        </div>
+        <div className="absolute animate-sparkle-1" style={{ top: '75%', right: '25%' }}>
+          <div className="w-1 h-1 rounded-full" style={{ background: '#e6c76d', opacity: 0.5 }} />
+        </div>
+        <div className="absolute animate-sparkle-2" style={{ top: '45%', left: '30%' }}>
+          <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#f5deb0', opacity: 0.4 }} />
+        </div>
+        <div className="absolute animate-sparkle-3" style={{ top: '85%', left: '40%' }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: '#e8c4a0', opacity: 0.5 }} />
+        </div>
+
+        {/* 浮遊する小さな円 */}
+        <div
+          className="absolute rounded-full animate-bubble-1"
+          style={{
+            width: 8,
+            height: 8,
+            background: 'rgba(212, 165, 116, 0.3)',
+            top: '40%',
+            left: '15%',
+          }}
+        />
+        <div
+          className="absolute rounded-full animate-bubble-2"
+          style={{
+            width: 6,
+            height: 6,
+            background: 'rgba(212, 165, 116, 0.25)',
+            top: '55%',
+            right: '20%',
+          }}
+        />
+        <div
+          className="absolute rounded-full animate-bubble-3"
+          style={{
+            width: 10,
+            height: 10,
+            background: 'rgba(200, 150, 100, 0.2)',
+            top: '25%',
+            right: '30%',
           }}
         />
       </div>
@@ -358,15 +411,8 @@ export default function TicketPage() {
         }}
       >
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-          <a
-            href="/"
-            className="w-10 h-10 flex items-center justify-center rounded-xl transition-all hover:scale-105"
-            style={{ background: 'rgba(212, 165, 116, 0.1)' }}
-          >
-            <svg className="w-5 h-5" style={{ color: '#a08060' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </a>
+          {/* 左側スペース（レイアウトバランス用） */}
+          <div className="w-10 h-10" />
           {/* ロゴ（大きめ表示・中央配置） */}
           <Image
             src="/images/logo.png"
@@ -539,6 +585,33 @@ export default function TicketPage() {
           0%, 100% { transform: translate(0, 0) scale(1); }
           50% { transform: translate(15px, -15px) scale(1.03); }
         }
+        @keyframes sparkle-1 {
+          0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+          50% { transform: scale(1) rotate(180deg); opacity: 0.8; }
+        }
+        @keyframes sparkle-2 {
+          0%, 100% { transform: scale(0.5) rotate(0deg); opacity: 0.3; }
+          50% { transform: scale(1.2) rotate(180deg); opacity: 0.7; }
+        }
+        @keyframes sparkle-3 {
+          0%, 100% { transform: scale(0.3) rotate(0deg); opacity: 0.2; }
+          50% { transform: scale(1) rotate(-180deg); opacity: 0.6; }
+        }
+        @keyframes bubble-1 {
+          0% { transform: translateY(0) scale(1); opacity: 0.3; }
+          50% { transform: translateY(-30px) scale(1.1); opacity: 0.5; }
+          100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
+        }
+        @keyframes bubble-2 {
+          0% { transform: translateY(0) scale(1); opacity: 0.25; }
+          50% { transform: translateY(-40px) scale(1.15); opacity: 0.4; }
+          100% { transform: translateY(-80px) scale(0.7); opacity: 0; }
+        }
+        @keyframes bubble-3 {
+          0% { transform: translateY(0) scale(1); opacity: 0.2; }
+          50% { transform: translateY(-25px) scale(1.05); opacity: 0.35; }
+          100% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+        }
         .animate-float-slow {
           animation: float-slow 8s ease-in-out infinite;
         }
@@ -547,6 +620,24 @@ export default function TicketPage() {
         }
         .animate-float-slower {
           animation: float-slower 12s ease-in-out infinite;
+        }
+        .animate-sparkle-1 {
+          animation: sparkle-1 3s ease-in-out infinite;
+        }
+        .animate-sparkle-2 {
+          animation: sparkle-2 4s ease-in-out infinite 0.5s;
+        }
+        .animate-sparkle-3 {
+          animation: sparkle-3 3.5s ease-in-out infinite 1s;
+        }
+        .animate-bubble-1 {
+          animation: bubble-1 6s ease-in-out infinite;
+        }
+        .animate-bubble-2 {
+          animation: bubble-2 8s ease-in-out infinite 2s;
+        }
+        .animate-bubble-3 {
+          animation: bubble-3 7s ease-in-out infinite 1s;
         }
       `}</style>
     </main>

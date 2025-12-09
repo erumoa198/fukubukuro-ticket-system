@@ -47,6 +47,13 @@ export default function AdminPage() {
   // チケット発行後QR表示用
   const [newlyCreatedSet, setNewlyCreatedSet] = useState<TicketSetWithTickets | null>(null)
 
+  // チケットセット編集・削除用
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
+  const [showEditSetModal, setShowEditSetModal] = useState(false)
+  const [editingSet, setEditingSet] = useState<TicketSetWithTickets | null>(null)
+  const [editCustomerNote, setEditCustomerNote] = useState('')
+  const [savingSet, setSavingSet] = useState(false)
+
   // チケットセット一覧取得
   const fetchTicketSets = async () => {
     setLoading(true)
@@ -238,6 +245,114 @@ export default function AdminPage() {
     alert('URLをコピーしました')
   }
 
+  // チケットセット編集モーダルを開く
+  const openEditSetModal = (set: TicketSetWithTickets) => {
+    setEditingSet(set)
+    setEditCustomerNote(set.customer_note || '')
+    setShowEditSetModal(true)
+    setOpenMenuId(null)
+  }
+
+  // チケットセット保存
+  const handleSaveSet = async () => {
+    if (!editingSet) return
+
+    setSavingSet(true)
+    try {
+      if (isDemoMode) {
+        // デモモードでは対応しない
+        alert('デモモードでは編集できません')
+      } else {
+        const { error } = await supabase
+          .from('ticket_sets')
+          .update({ customer_note: editCustomerNote || null })
+          .eq('id', editingSet.id)
+
+        if (error) throw error
+      }
+
+      await fetchTicketSets()
+      setShowEditSetModal(false)
+      setEditingSet(null)
+      alert('チケットセットを更新しました')
+    } catch (err) {
+      console.error('チケットセット保存エラー:', err)
+      alert('保存に失敗しました')
+    } finally {
+      setSavingSet(false)
+    }
+  }
+
+  // チケットセット削除
+  const handleDeleteSet = async (set: TicketSetWithTickets) => {
+    const usedCount = set.tickets.filter(t => t.is_used).length
+    const confirmMessage = usedCount > 0
+      ? `このチケットセットには使用済みチケットが${usedCount}枚あります。\n本当に削除しますか？この操作は取り消せません。`
+      : `「${SET_TYPE_NAMES[set.set_type]}」を削除しますか？\nこの操作は取り消せません。`
+
+    if (!confirm(confirmMessage)) return
+
+    setOpenMenuId(null)
+    try {
+      if (isDemoMode) {
+        alert('デモモードでは削除できません')
+        return
+      }
+
+      // まずチケットを削除
+      const { error: ticketError } = await supabase
+        .from('tickets')
+        .delete()
+        .eq('set_id', set.id)
+
+      if (ticketError) throw ticketError
+
+      // 次にチケットセットを削除
+      const { error: setError } = await supabase
+        .from('ticket_sets')
+        .delete()
+        .eq('id', set.id)
+
+      if (setError) throw setError
+
+      await fetchTicketSets()
+      alert('チケットセットを削除しました')
+    } catch (err) {
+      console.error('チケットセット削除エラー:', err)
+      alert('削除に失敗しました')
+    }
+  }
+
+  // チケット使用取消
+  const handleRevertTicket = async (ticket: Ticket) => {
+    if (!confirm(`「${ticket.ticket_name}」の使用を取り消しますか？`)) return
+
+    try {
+      if (isDemoMode) {
+        alert('デモモードでは取消できません')
+        return
+      }
+
+      const { error } = await supabase
+        .from('tickets')
+        .update({
+          is_used: false,
+          used_at: null,
+          used_by: null,
+          used_menu: null
+        })
+        .eq('id', ticket.id)
+
+      if (error) throw error
+
+      await fetchTicketSets()
+      alert('チケットの使用を取り消しました')
+    } catch (err) {
+      console.error('チケット使用取消エラー:', err)
+      alert('取消に失敗しました')
+    }
+  }
+
   // スタッフモーダルを開く
   const openStaffModal = (staff?: Staff) => {
     if (staff) {
@@ -357,6 +472,13 @@ export default function AdminPage() {
     return (
       <main className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
+          {/* トップへ戻る */}
+          <a href="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            トップへ戻る
+          </a>
           <h1 className="text-xl font-semibold text-center mb-2">管理画面</h1>
           <p className="text-sm text-gray-500 text-center mb-6">
             チケット発行・スタッフ管理を行います
@@ -532,7 +654,7 @@ export default function AdminPage() {
                 const totalCount = set.tickets.length
 
                 return (
-                  <div key={set.id} className="p-4 hover:bg-gray-50">
+                  <div key={set.id} className="p-4 hover:bg-gray-50 relative">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
@@ -553,7 +675,7 @@ export default function AdminPage() {
                           &nbsp;|&nbsp;ID: {set.id.slice(0, 8)}...
                         </p>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex items-center gap-2">
                         <button
                           onClick={() => setSelectedSet(set)}
                           className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
@@ -566,6 +688,49 @@ export default function AdminPage() {
                         >
                           URLコピー
                         </button>
+                        {/* メニューボタン */}
+                        <div className="relative">
+                          <button
+                            onClick={() => setOpenMenuId(openMenuId === set.id ? null : set.id)}
+                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <circle cx="12" cy="5" r="2" />
+                              <circle cx="12" cy="12" r="2" />
+                              <circle cx="12" cy="19" r="2" />
+                            </svg>
+                          </button>
+                          {/* ドロップダウンメニュー */}
+                          {openMenuId === set.id && (
+                            <>
+                              {/* オーバーレイ（メニュー外クリックで閉じる） */}
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenMenuId(null)}
+                              />
+                              <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                                <button
+                                  onClick={() => openEditSetModal(set)}
+                                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                  編集
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteSet(set)}
+                                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
+                                  削除
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -574,11 +739,13 @@ export default function AdminPage() {
                       {set.tickets.map((ticket) => (
                         <span
                           key={ticket.id}
+                          onClick={() => ticket.is_used && handleRevertTicket(ticket)}
                           className={`text-xs px-2 py-1 rounded ${
                             ticket.is_used
-                              ? 'bg-gray-100 text-gray-400 line-through'
+                              ? 'bg-gray-100 text-gray-400 line-through cursor-pointer hover:bg-gray-200'
                               : 'bg-green-50 text-green-700'
                           }`}
+                          title={ticket.is_used ? 'クリックで使用取消' : ''}
                         >
                           {ticket.ticket_name}
                           {ticket.is_used && ticket.used_at && (
@@ -809,6 +976,61 @@ export default function AdminPage() {
                   className="flex-1 btn-gold disabled:opacity-50"
                 >
                   {savingStaff ? '保存中...' : '保存'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* チケットセット編集モーダル */}
+        {showEditSetModal && editingSet && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
+              <h3 className="text-lg font-semibold text-center mb-4">
+                チケットセット編集
+              </h3>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  セットタイプ
+                </label>
+                <p className="px-4 py-2 bg-gray-100 rounded-lg text-gray-600">
+                  {SET_TYPE_NAMES[editingSet.set_type]}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  セットタイプは変更できません
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  購入者メモ
+                </label>
+                <input
+                  type="text"
+                  placeholder="例: 山田花子様"
+                  value={editCustomerNote}
+                  onChange={(e) => setEditCustomerNote(e.target.value)}
+                  className="w-full px-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setShowEditSetModal(false)
+                    setEditingSet(null)
+                  }}
+                  className="flex-1 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  キャンセル
+                </button>
+                <button
+                  onClick={handleSaveSet}
+                  disabled={savingSet}
+                  className="flex-1 btn-gold disabled:opacity-50"
+                >
+                  {savingSet ? '保存中...' : '保存'}
                 </button>
               </div>
             </div>
