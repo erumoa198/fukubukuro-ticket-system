@@ -22,10 +22,41 @@ interface TicketSetWithTickets extends TicketSet {
   tickets: Ticket[]
 }
 
+// ログインセッションの有効期限（7日間）
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000
+
 export default function AdminPage() {
   const [step, setStep] = useState<AdminStep>('auth')
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState(false)
+  const [isCheckingSession, setIsCheckingSession] = useState(true)
+
+  // ページ読み込み時にセッションをチェック
+  useEffect(() => {
+    const checkSession = () => {
+      if (typeof window !== 'undefined') {
+        const sessionData = localStorage.getItem('adminSession')
+        if (sessionData) {
+          try {
+            const { expiresAt } = JSON.parse(sessionData)
+            if (new Date(expiresAt) > new Date()) {
+              // セッション有効
+              setStep('dashboard')
+              fetchTicketSets()
+              fetchStaff()
+            } else {
+              // セッション期限切れ
+              localStorage.removeItem('adminSession')
+            }
+          } catch {
+            localStorage.removeItem('adminSession')
+          }
+        }
+      }
+      setIsCheckingSession(false)
+    }
+    checkSession()
+  }, [])
   const [ticketSets, setTicketSets] = useState<TicketSetWithTickets[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedSet, setSelectedSet] = useState<TicketSetWithTickets | null>(null)
@@ -121,12 +152,22 @@ export default function AdminPage() {
   const handleAuth = () => {
     const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'fukubukuro2025'
     if (password === correctPassword) {
+      // セッションを保存（7日間有効）
+      const expiresAt = new Date(Date.now() + SESSION_DURATION).toISOString()
+      localStorage.setItem('adminSession', JSON.stringify({ expiresAt }))
       setStep('dashboard')
       fetchTicketSets()
       fetchStaff()
     } else {
       setPasswordError(true)
     }
+  }
+
+  // ログアウト
+  const handleLogout = () => {
+    localStorage.removeItem('adminSession')
+    setStep('auth')
+    setPassword('')
   }
 
   // 新規チケットセット作成
@@ -461,12 +502,13 @@ export default function AdminPage() {
     }
   }
 
-  // ログアウト
-  const handleLogout = () => {
-    setStep('auth')
-    setPassword('')
-    setTicketSets([])
-    setStaffList([])
+  // セッションチェック中のローディング
+  if (isCheckingSession) {
+    return (
+      <main className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div className="text-gray-500">読み込み中...</div>
+      </main>
+    )
   }
 
   if (step === 'auth') {
