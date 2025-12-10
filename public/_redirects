@@ -1,6 +1,5 @@
 # Cloudflare Pages リダイレクト設定
-# /ticket/:id へのアクセスを /ticket-view/ ページで処理
-# /ticket/ とは別のパスなので無限ループを回避
+# /ticket/* へのアクセスを /ticket-view/ ページで処理
+# splatパターンで末尾スラッシュの有無に関係なく処理
 
-/ticket/:id  /ticket-view/index.html  200
-/ticket/:id/  /ticket-view/index.html  200
+/ticket/*  /ticket-view/index.html  200
