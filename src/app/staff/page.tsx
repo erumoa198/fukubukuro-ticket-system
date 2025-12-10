@@ -184,6 +184,38 @@ export default function StaffPage() {
     setStep('scan')
   }
 
+  // 同じお客様の残りチケットを表示（使用済みチケットを更新して戻る）
+  const handleContinueSameCustomer = async () => {
+    if (!ticketSet) {
+      handleNext()
+      return
+    }
+
+    // チケットデータを再取得して最新状態に更新
+    if (isDemoMode) {
+      const updatedTickets = getDemoTickets(ticketSet.id)
+      setTicketSet({
+        ...ticketSet,
+        tickets: updatedTickets
+      })
+    } else {
+      const { data: ticketsData } = await supabase
+        .from('tickets')
+        .select('*')
+        .eq('set_id', ticketSet.id)
+        .order('created_at', { ascending: true })
+
+      setTicketSet({
+        ...ticketSet,
+        tickets: ticketsData || []
+      })
+    }
+
+    setSelectedTicket(null)
+    setSelectedMenu('')
+    setStep('tickets')
+  }
+
   // ログアウト
   const handleLogout = () => {
     setStep('auth')
@@ -307,6 +339,17 @@ export default function StaffPage() {
       case 'tickets':
         return (
           <div>
+            {/* 上部に他のお客様ボタン */}
+            <button
+              onClick={handleNext}
+              className="w-full mb-4 py-2 text-gray-600 hover:text-gray-800 flex items-center justify-center gap-1"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              他のお客様
+            </button>
+
             <div className="mb-6">
               <h2 className="text-xl font-semibold">{ticketSet && SET_TYPE_NAMES[ticketSet.set_type]}</h2>
               <p className="text-sm text-gray-500">使用するチケットを選択</p>
@@ -337,12 +380,6 @@ export default function StaffPage() {
                 </button>
               ))}
             </div>
-            <button
-              onClick={handleNext}
-              className="w-full mt-4 py-2 text-gray-600 hover:text-gray-800"
-            >
-              ← 別のお客様をスキャン
-            </button>
           </div>
         )
 
@@ -420,10 +457,10 @@ export default function StaffPage() {
               <p className="text-sm text-gray-500 mb-6">選択アイテム: {selectedMenu}</p>
             )}
             <button
-              onClick={handleNext}
+              onClick={handleContinueSameCustomer}
               className="btn-gold w-full max-w-xs"
             >
-              次のお客様へ
+              このお客様の残りチケットを見る
             </button>
           </div>
         )
