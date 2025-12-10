@@ -166,7 +166,8 @@ export default function AdminPage() {
           .from('ticket_sets')
           .insert({
             set_type: createType,
-            customer_note: customerNote || null
+            customer_note: customerNote || null,
+            expires_at: '2026-12-31T23:59:59Z' // 2026年末まで有効
           })
           .select()
           .single()

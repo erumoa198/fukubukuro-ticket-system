@@ -179,7 +179,7 @@ export const addDemoTicketSet = (
     set_type: setType,
     customer_note: customerNote,
     created_at: new Date().toISOString(),
-    expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1年後
+    expires_at: '2026-12-31T23:59:59Z', // 2026年末まで有効
   }
   _demoTicketSets.unshift(newSet)
 
